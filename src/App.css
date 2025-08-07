@@ -459,3 +459,65 @@ p {
   background-color: var(--pink-accent);
   color: white;
 }
+
+/* ======================================== */
+/* Estilos para os Botões de Ação Global    */
+/* ======================================== */
+
+.global-actions-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 40px; /* Espaçamento antes da lista de matérias */
+}
+
+.global-action-button {
+  flex-grow: 1; /* Faz os botões dividirem o espaço igualmente */
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.global-action-button.presente-todas {
+  background-color: var(--purple-dark);
+  color: white;
+  border: 1px solid var(--purple-dark);
+}
+
+.global-action-button.presente-todas:hover {
+  background-color: #8E24AA; /* Roxo mais claro */
+  transform: translateY(-2px);
+}
+
+.global-action-button.faltei-todas {
+  background-color: var(--bg-light);
+  color: var(--pink-accent);
+  border: 1px solid var(--pink-accent);
+}
+
+.global-action-button.faltei-todas:hover {
+  background-color: var(--pink-accent);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ======================================== */
+/* Estilos para o Modal de Feedback         */
+/* ======================================== */
+
+.feedback-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 16px 0 0 0; /* Adiciona um espaço acima da lista */
+}
+
+.feedback-list li {
+  padding: 8px;
+  background-color: var(--bg-dark);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-align: center;
+}

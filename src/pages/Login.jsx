@@ -49,7 +49,7 @@ export default function Login() {
     <div className="login-container">
       <div className="login-form-box">
         <h2 className="login-heading">{isLogin ? 'Faça login' : 'Crie sua conta'}</h2>
-        <p className="login-subheading">para gerenciar suas faltas ✌️</p>
+        <p className="login-subheading">para gerenciar suas faltas </p>
 
         <form onSubmit={handleSubmit} className="login-form">
           <input

@@ -12,19 +12,26 @@ import {
   deleteDoc,
   increment,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  writeBatch
 } from 'firebase/firestore';
 
-// Importando os componentes de arquivos separados
+// Importando todos os nossos componentes de arquivos separados
 import EditMateriaForm from './EditMateriaForm';
 import HistoricoFaltasModal from './HistoricoFaltasModal';
+import FeedbackModal from './FeedbackModal';
 
 export default function Dashboard() {
   const [materias, setMaterias] = useState([]);
   const [nomeMateria, setNomeMateria] = useState('');
   const [diasSemana, setDiasSemana] = useState({});
   const [editingMateriaId, setEditingMateriaId] = useState(null);
-  const [materiaModal, setMateriaModal] = useState(null); // Controla o modal de histórico
+  const [materiaModal, setMateriaModal] = useState(null);
+  const [feedbackModalInfo, setFeedbackModalInfo] = useState({
+    isOpen: false,
+    title: '',
+    subjects: []
+  });
 
   const user = auth.currentUser;
   const hoje = new Date().getDay(); // Pega o dia da semana atual (0=Dom, 1=Seg, ...)
@@ -43,38 +50,14 @@ export default function Dashboard() {
 
     return () => unsubscribe();
   }, [user]);
-  const handleRemoveFalta = async (faltaParaRemover) => {
-    if (!materiaModal) return; // Segurança
 
-    const materiaRef = doc(db, "materias", materiaModal.id);
-    try {
-      await updateDoc(materiaRef, {
-        // Remove o objeto exato do array de histórico
-        historicoFaltas: arrayRemove(faltaParaRemover),
-        // Decrementa o contador total de faltas
-        faltasCometidas: increment(-1)
-      });
-
-      // Atualiza o estado local do modal para refletir a remoção imediatamente
-      setMateriaModal(prev => ({
-        ...prev,
-        historicoFaltas: prev.historicoFaltas.filter(f => f.data !== faltaParaRemover.data)
-      }));
-
-    } catch (error) {
-      console.error("Erro ao remover falta: ", error);
-      alert("Não foi possível remover a falta. Tente novamente.");
-    }
-  };
   const handleAddMateria = async (e) => {
     e.preventDefault();
     const diasSelecionados = Object.keys(diasSemana).filter(dia => diasSemana[dia]).map(Number);
-
     if (!nomeMateria || diasSelecionados.length === 0) {
       alert("Preencha o nome e selecione pelo menos um dia da semana.");
       return;
     }
-
     try {
       await addDoc(collection(db, 'materias'), {
         userId: user.uid,
@@ -117,9 +100,59 @@ export default function Dashboard() {
       });
     }
   };
-
+  
+  const handleRemoveFalta = async (faltaParaRemover) => {
+    if (!materiaModal) return;
+    const materiaRef = doc(db, "materias", materiaModal.id);
+    try {
+      await updateDoc(materiaRef, {
+        historicoFaltas: arrayRemove(faltaParaRemover),
+        faltasCometidas: increment(-1)
+      });
+      setMateriaModal(prev => ({
+        ...prev,
+        historicoFaltas: prev.historicoFaltas.filter(f => f.data !== faltaParaRemover.data)
+      }));
+    } catch (error) {
+      console.error("Erro ao remover falta: ", error);
+      alert("Não foi possível remover a falta. Tente novamente.");
+    }
+  };
+  
   const handleDiaChange = (dia) => {
     setDiasSemana(prev => ({ ...prev, [dia]: !prev[dia] }));
+  };
+  
+  const handleGlobalAttendance = async (type) => {
+    const materiasDeHoje = materias.filter(m => m.diasDaSemana.includes(hoje));
+    if (materiasDeHoje.length === 0) {
+      alert("Nenhuma matéria agendada para hoje!");
+      return;
+    }
+    const batch = writeBatch(db);
+    materiasDeHoje.forEach(materia => {
+      const materiaRef = doc(db, "materias", materia.id);
+      if (type === 'presente') {
+        batch.update(materiaRef, { aulasAssistidas: increment(1) });
+      } else {
+        batch.update(materiaRef, {
+          faltasCometidas: increment(1),
+          historicoFaltas: arrayUnion({ data: new Date() })
+        });
+      }
+    });
+    try {
+      await batch.commit();
+      const acao = type === 'presente' ? 'Presenças aplicadas' : 'Faltas aplicadas';
+      setFeedbackModalInfo({
+        isOpen: true,
+        title: `${acao} em ${materiasDeHoje.length} matéria(s):`,
+        subjects: materiasDeHoje
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar matérias em lote: ", error);
+      alert("Ocorreu um erro ao atualizar as matérias.");
+    }
   };
 
   return (
@@ -159,6 +192,21 @@ export default function Dashboard() {
               <button type="submit" className="login-submit-button">Adicionar Matéria</button>
             </div>
           </form>
+        </div>
+
+        <div className="global-actions-container">
+            <button
+              className="global-action-button presente-todas"
+              onClick={() => handleGlobalAttendance('presente')}
+            >
+              Presente em Todas Hoje
+            </button>
+            <button
+              className="global-action-button faltei-todas"
+              onClick={() => handleGlobalAttendance('faltei')}
+            >
+              Faltei em Todas Hoje
+            </button>
         </div>
 
         <h2 style={{ marginBottom: '24px' }}>Minhas Matérias</h2>
@@ -233,6 +281,13 @@ export default function Dashboard() {
         onClose={() => setMateriaModal(null)}
         faltas={materiaModal?.historicoFaltas || []}
         onRemoveFalta={handleRemoveFalta}
+      />
+      
+      <FeedbackModal
+        isOpen={feedbackModalInfo.isOpen}
+        onClose={() => setFeedbackModalInfo({ isOpen: false, title: '', subjects: [] })}
+        title={feedbackModalInfo.title}
+        affectedSubjects={feedbackModalInfo.subjects}
       />
     </>
   );
