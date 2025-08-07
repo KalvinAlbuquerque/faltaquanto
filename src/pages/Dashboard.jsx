@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { auth, db } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import {
@@ -33,8 +33,11 @@ export default function Dashboard() {
     subjects: []
   });
 
+  const [selectedDay, setSelectedDay] = useState(null); // null = Todos, 0 = Dom, 1 = Seg, etc.
+  const [searchTerm, setSearchTerm] = useState('');
   const user = auth.currentUser;
   const hoje = new Date().getDay(); // Pega o dia da semana atual (0=Dom, 1=Seg, ...)
+  const diasDaSemanaNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   // Efeito para buscar as matérias do usuário em tempo real
   useEffect(() => {
@@ -119,6 +122,23 @@ export default function Dashboard() {
     }
   };
   
+  const filteredMaterias = useMemo(() => {
+    return materias
+      .filter(materia => {
+        // Filtro por dia da semana
+        if (selectedDay !== null) {
+          return materia.diasDaSemana.includes(selectedDay);
+        }
+        return true; // Se nenhum dia selecionado, retorna todas
+      })
+      .filter(materia => {
+        // Filtro por termo de busca (case-insensitive)
+        if (searchTerm) {
+          return materia.nomeMateria.toLowerCase().includes(searchTerm.toLowerCase());
+        }
+        return true; // Se não houver busca, retorna todas
+      });
+  }, [materias, selectedDay, searchTerm]);
   const handleDiaChange = (dia) => {
     setDiasSemana(prev => ({ ...prev, [dia]: !prev[dia] }));
   };
@@ -209,9 +229,36 @@ export default function Dashboard() {
             </button>
         </div>
 
+        <div className="filter-controls">
+          <div className="day-filter-container">
+            <button
+              className={`day-filter-button ${selectedDay === null ? 'active' : ''}`}
+              onClick={() => setSelectedDay(null)}
+            >
+              Todos
+            </button>
+            {diasDaSemanaNomes.map((dia, index) => (
+              <button
+                key={index}
+                className={`day-filter-button ${selectedDay === index ? 'active' : ''}`}
+                onClick={() => setSelectedDay(index)}
+              >
+                {dia}
+              </button>
+            ))}
+          </div>
+          <input
+            type="search"
+            className="search-input"
+            placeholder="Buscar matéria pelo nome..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
         <h2 style={{ marginBottom: '24px' }}>Minhas Matérias</h2>
         <div className="materias-grid">
-          {materias.length > 0 ? materias.map(materia => {
+          {filteredMaterias.length > 0 ? filteredMaterias.map(materia => {
             const faltasPercent = (materia.faltasCometidas / materia.totalFaltasPermitidas) * 100;
             const isToday = materia.diasDaSemana.includes(hoje);
 
@@ -271,7 +318,7 @@ export default function Dashboard() {
               </div>
             );
           }) : (
-            <p style={{ color: 'var(--text-secondary)' }}>Nenhuma matéria cadastrada ainda. Adicione uma no formulário acima!</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Nenhuma matéria encontrada para os filtros aplicados.</p>
           )}
         </div>
       </div>
@@ -282,7 +329,7 @@ export default function Dashboard() {
         faltas={materiaModal?.historicoFaltas || []}
         onRemoveFalta={handleRemoveFalta}
       />
-      
+
       <FeedbackModal
         isOpen={feedbackModalInfo.isOpen}
         onClose={() => setFeedbackModalInfo({ isOpen: false, title: '', subjects: [] })}

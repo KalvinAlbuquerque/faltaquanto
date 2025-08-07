@@ -521,3 +521,72 @@ p {
   margin-bottom: 8px;
   text-align: center;
 }
+
+/* ======================================== */
+/* Estilos para os Controles de Filtro      */
+/* ======================================== */
+
+.filter-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--bg-light);
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+
+.day-filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.day-filter-button {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-radius: 20px; /* Botões arredondados */
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.day-filter-button:hover {
+  border-color: var(--purple-light);
+  color: var(--purple-light);
+}
+
+.day-filter-button.active {
+  background-color: var(--purple-dark);
+  border-color: var(--purple-dark);
+  color: white;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-size: 1rem;
+  box-sizing: border-box; /* Garante que o padding não estoure o layout */
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--purple-dark);
+}
+
+/* Ajuste para telas menores */
+@media (min-width: 768px) {
+  .filter-controls {
+    flex-direction: row;
+    align-items: center;
+  }
+  .search-input {
+    max-width: 400px;
+  }
+}
