@@ -1,11 +1,11 @@
 // src/pages/HistoricoFaltasModal.jsx
 
-export default function HistoricoFaltasModal({ isOpen, onClose, faltas = [] }) {
+// Adicionamos a nova prop 'onRemoveFalta'
+export default function HistoricoFaltasModal({ isOpen, onClose, faltas = [], onRemoveFalta }) {
   if (!isOpen) {
     return null;
   }
 
-  // Função para formatar a data do Firebase para um formato legível
   const formatarData = (timestamp) => {
     if (!timestamp || !timestamp.toDate) {
       return "Data inválida";
@@ -19,9 +19,7 @@ export default function HistoricoFaltasModal({ isOpen, onClose, faltas = [] }) {
   };
 
   return (
-    // O fundo escuro do modal
     <div className="modal-overlay" onClick={onClose}>
-      {/* O conteúdo do modal */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Histórico de Faltas</h3>
@@ -29,9 +27,18 @@ export default function HistoricoFaltasModal({ isOpen, onClose, faltas = [] }) {
         </div>
         <div className="modal-body">
           {faltas.length > 0 ? (
-            <ul>
+            <ul className="history-list">
               {faltas.map((falta, index) => (
-                <li key={index}>{formatarData(falta.data)}</li>
+                <li key={index} className="history-list-item">
+                  <span>{formatarData(falta.data)}</span>
+                  {/* Este botão chamará a função que veio do Dashboard */}
+                  <button 
+                    className="remove-falta-button" 
+                    onClick={() => onRemoveFalta(falta)}
+                  >
+                    Remover
+                  </button>
+                </li>
               ))}
             </ul>
           ) : (

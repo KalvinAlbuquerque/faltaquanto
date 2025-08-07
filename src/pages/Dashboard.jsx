@@ -11,7 +11,8 @@ import {
   updateDoc,
   deleteDoc,
   increment,
-  arrayUnion
+  arrayUnion,
+  arrayRemove
 } from 'firebase/firestore';
 
 // Importando os componentes de arquivos separados
@@ -42,7 +43,29 @@ export default function Dashboard() {
 
     return () => unsubscribe();
   }, [user]);
+  const handleRemoveFalta = async (faltaParaRemover) => {
+    if (!materiaModal) return; // Segurança
 
+    const materiaRef = doc(db, "materias", materiaModal.id);
+    try {
+      await updateDoc(materiaRef, {
+        // Remove o objeto exato do array de histórico
+        historicoFaltas: arrayRemove(faltaParaRemover),
+        // Decrementa o contador total de faltas
+        faltasCometidas: increment(-1)
+      });
+
+      // Atualiza o estado local do modal para refletir a remoção imediatamente
+      setMateriaModal(prev => ({
+        ...prev,
+        historicoFaltas: prev.historicoFaltas.filter(f => f.data !== faltaParaRemover.data)
+      }));
+
+    } catch (error) {
+      console.error("Erro ao remover falta: ", error);
+      alert("Não foi possível remover a falta. Tente novamente.");
+    }
+  };
   const handleAddMateria = async (e) => {
     e.preventDefault();
     const diasSelecionados = Object.keys(diasSemana).filter(dia => diasSemana[dia]).map(Number);
@@ -209,6 +232,7 @@ export default function Dashboard() {
         isOpen={!!materiaModal}
         onClose={() => setMateriaModal(null)}
         faltas={materiaModal?.historicoFaltas || []}
+        onRemoveFalta={handleRemoveFalta}
       />
     </>
   );

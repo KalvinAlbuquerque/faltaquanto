@@ -420,3 +420,42 @@ p {
 .modal-body li:last-child {
   border-bottom: none;
 }
+
+/* ======================================== */
+/* Estilos para Remoção de Falta no Modal   */
+/* ======================================== */
+
+.history-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.history-list-item:last-child {
+  border-bottom: none;
+}
+
+.remove-falta-button {
+  background: none;
+  border: 1px solid var(--pink-accent);
+  color: var(--pink-accent);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.remove-falta-button:hover {
+  background-color: var(--pink-accent);
+  color: white;
+}
