@@ -1,0 +1,31 @@
+/* src/index.css */
+
+/* 1. Importar uma fonte moderna do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* 2. Definir nossa paleta de cores como variáveis CSS */
+:root {
+  --purple-dark: #6A1B9A;
+  --purple-light: #CE93D8;
+  --pink-accent: #EC407A;
+  --bg-dark: #121212; /* Um preto um pouco mais suave */
+  --bg-light: #1E1E1E; /* Um cinza escuro para cards */
+  --text-primary: #EAEAEA;
+  --text-secondary: #A0A0A0;
+  --border-color: #333333;
+}
+
+/* 3. Estilos globais básicos */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Um reset simples para botões e inputs */
+button, input {
+  font-family: 'Poppins', sans-serif;
+}

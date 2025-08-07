@@ -1,0 +1,220 @@
+/* src/App.css - ESTILO CENTRALIZADO */
+
+/* =============================================== */
+/* Estilos Globais e Variáveis (do antigo index.css) */
+/* =============================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --purple-dark: #6A1B9A;
+  --purple-light: #CE93D8;
+  --pink-accent: #EC407A;
+  --bg-dark: #121212;
+  --bg-light: #1E1E1E;
+  --text-primary: #EAEAEA;
+  --text-secondary: #A0A0A0;
+  --border-color: #333333;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, label {
+  font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+/* ======================================== */
+/* Estilos da Tela de Login                 */
+/* ======================================== */
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-form-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background-color: var(--bg-light);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.login-heading {
+  margin-bottom: 8px;
+  color: var(--purple-light);
+}
+
+.login-subheading {
+  margin-bottom: 24px;
+  color: var(--text-secondary);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-input {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--purple-dark);
+}
+
+.login-submit-button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--purple-dark);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-submit-button:hover {
+  background-color: #7B1FA2;
+}
+
+.login-toggle-button {
+  background: none;
+  border: none;
+  color: var(--pink-accent);
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px;
+}
+
+.login-error {
+  color: var(--pink-accent);
+  margin-top: 16px;
+}
+
+
+/* ======================================== */
+/* Estilos da Tela de Dashboard             */
+/* ======================================== */
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--purple-light);
+}
+
+.dashboard-logo span {
+  color: var(--pink-accent);
+}
+
+.dashboard-user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-logout-button {
+  padding: 8px 16px;
+  border: 1px solid var(--pink-accent);
+  color: var(--pink-accent);
+  background-color: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dashboard-logout-button:hover {
+  background-color: var(--pink-accent);
+  color: white;
+}
+
+.form-container {
+  background-color: var(--bg-light);
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+/* (Reutilizando os estilos de input e botão do login para consistência) */
+.form-container input {
+    width: 100%;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
+
+.materias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.materia-card {
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.materia-card h4 {
+  font-size: 1.25rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--bg-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--purple-dark);
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
+}
+
+.progress-fill.danger {
+    background-color: var(--pink-accent);
+}
