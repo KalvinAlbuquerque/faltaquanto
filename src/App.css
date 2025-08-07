@@ -218,3 +218,205 @@ p {
 .progress-fill.danger {
     background-color: var(--pink-accent);
 }
+
+/* ======================================== */
+/* Estilos Adicionais para o Dashboard      */
+/* ======================================== */
+
+.materia-card {
+  /* Adiciona um espaçamento interno para os botões não ficarem colados */
+  justify-content: space-between;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.icon-button:hover {
+  opacity: 1;
+}
+
+.attendance-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.action-button {
+  flex-grow: 1; /* Faz os botões ocuparem o mesmo espaço */
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-button.presente {
+  background-color: var(--purple-dark);
+  color: white;
+}
+.action-button.presente:hover {
+  background-color: #7B1FA2;
+}
+
+.action-button.faltei {
+  background-color: transparent;
+  color: var(--pink-accent);
+  border: 1px solid var(--pink-accent);
+}
+.action-button.faltei:hover {
+    background-color: var(--pink-accent);
+    color: white;
+}
+
+.action-button:disabled {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  border-color: var(--border-color);
+}
+
+/* Estilos para o Formulário de Edição */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.dias-checkbox-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.action-button.primary {
+    background-color: var(--purple-dark);
+    color: white;
+}
+.action-button.secondary {
+    background-color: var(--bg-dark);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.card-footer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.history-button {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.history-button:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Estilos do Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--bg-light);
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-body {
+  overflow-y: auto; /* Adiciona scroll se a lista for grande */
+}
+
+.modal-body ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-body li {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-body li:last-child {
+  border-bottom: none;
+}
