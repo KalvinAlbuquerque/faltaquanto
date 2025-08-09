@@ -44,12 +44,19 @@ export default function EditMateriaForm({ materia, onSave, onCancel }) {
       />
       <div className="dias-checkbox-container">
         {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dia, index) => (
-          <label key={index} className="checkbox-label">
+          // O label agora tem a classe dinâmica
+          <label
+            key={index}
+            className={`day-label ${dias[index] ? 'active' : ''}`}
+          >
+            {/* O input agora está escondido, mas funciona perfeitamente */}
             <input
               type="checkbox"
+              className="day-input"
               checked={!!dias[index]}
               onChange={() => handleDiaChange(index)}
-            /> {dia}
+            />
+            {dia}
           </label>
         ))}
       </div>

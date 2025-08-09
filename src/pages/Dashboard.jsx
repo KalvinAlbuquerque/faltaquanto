@@ -181,7 +181,7 @@ export default function Dashboard() {
         <header className="dashboard-header">
           <h1 className="dashboard-logo">Falta<span>Quanto</span></h1>
           <div className="dashboard-user-info">
-            <p>Olá, {user?.email}</p>
+            <p>Olá, Sunshine</p>
             <button onClick={() => signOut(auth)} className="dashboard-logout-button">Sair</button>
           </div>
         </header>
@@ -197,15 +197,20 @@ export default function Dashboard() {
                 value={nomeMateria}
                 onChange={(e) => setNomeMateria(e.target.value)}
               />
-              <div className="dias-checkbox-container" style={{ justifyContent: 'flex-start' }}>
-                <span style={{color: 'var(--text-secondary)'}}>Dias:</span>
+               <div className="dias-checkbox-container" style={{ gridColumn: '1 / -1' }}>
+                <span style={{color: 'var(--text-secondary)', gridColumn: '1 / -1'}}>Dias:</span>
                 {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dia, index) => (
-                  <label key={index} className="checkbox-label">
+                  <label
+                    key={index}
+                    className={`day-label ${diasSemana[index] ? 'active' : ''}`}
+                  >
                     <input
                       type="checkbox"
+                      className="day-input"
                       checked={!!diasSemana[index]}
                       onChange={() => handleDiaChange(index)}
-                    /> {dia}
+                    />
+                    {dia}
                   </label>
                 ))}
               </div>
