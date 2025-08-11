@@ -1,9 +1,9 @@
-// src/pages/EditMateriaForm.jsx
-
 import { useState } from 'react';
 
 export default function EditMateriaForm({ materia, onSave, onCancel }) {
   const [nome, setNome] = useState(materia.nomeMateria);
+  // Adicionado novo estado para o total de faltas, usando o valor da matéria existente
+  const [totalFaltas, setTotalFaltas] = useState(materia.totalFaltasPermitidas || 7);
   const [dias, setDias] = useState(() => {
     // Cria um estado inicial para os checkboxes a partir dos dados da matéria
     const diasState = {};
@@ -18,14 +18,16 @@ export default function EditMateriaForm({ materia, onSave, onCancel }) {
   const handleSave = (e) => {
     e.preventDefault();
     const diasSelecionados = Object.keys(dias).filter(dia => dias[dia]).map(Number);
-    if (!nome || diasSelecionados.length === 0) {
-      alert("O nome e pelo menos um dia da semana são obrigatórios.");
+    // Adicionada a validação para o nome e dias, e agora também para o total de faltas
+    if (!nome || diasSelecionados.length === 0 || totalFaltas < 0) {
+      alert("O nome, pelo menos um dia da semana e o total de faltas são obrigatórios.");
       return;
     }
-    // Envia os novos dados para a função onSave no Dashboard
+    // Envia os novos dados para a função onSave no Dashboard, incluindo o total de faltas
     onSave({
       nomeMateria: nome,
-      diasDaSemana: diasSelecionados
+      diasDaSemana: diasSelecionados,
+      totalFaltasPermitidas: Number(totalFaltas)
     });
   };
 
@@ -41,6 +43,14 @@ export default function EditMateriaForm({ materia, onSave, onCancel }) {
         value={nome}
         onChange={(e) => setNome(e.target.value)}
         placeholder="Nome da Matéria"
+      />
+      <input
+        type="number"
+        className="login-input"
+        value={totalFaltas}
+        onChange={(e) => setTotalFaltas(e.target.value)}
+        placeholder="Faltas Permitidas"
+        min="0"
       />
       <div className="dias-checkbox-container">
         {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dia, index) => (

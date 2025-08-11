@@ -25,6 +25,8 @@ export default function Dashboard() {
   const [materias, setMaterias] = useState([]);
   const [nomeMateria, setNomeMateria] = useState('');
   const [diasSemana, setDiasSemana] = useState({});
+  // Adicionado novo estado para o total de faltas
+  const [totalFaltasPermitidas, setTotalFaltasPermitidas] = useState(7);
   const [editingMateriaId, setEditingMateriaId] = useState(null);
   const [materiaModal, setMateriaModal] = useState(null);
   const [feedbackModalInfo, setFeedbackModalInfo] = useState({
@@ -57,8 +59,9 @@ export default function Dashboard() {
   const handleAddMateria = async (e) => {
     e.preventDefault();
     const diasSelecionados = Object.keys(diasSemana).filter(dia => diasSemana[dia]).map(Number);
-    if (!nomeMateria || diasSelecionados.length === 0) {
-      alert("Preencha o nome e selecione pelo menos um dia da semana.");
+    // Adicionada a validação para o nome e dias, e agora também para o total de faltas
+    if (!nomeMateria || diasSelecionados.length === 0 || totalFaltasPermitidas < 0) {
+      alert("Preencha o nome, selecione pelo menos um dia da semana e o total de faltas deve ser um número válido.");
       return;
     }
     try {
@@ -66,13 +69,14 @@ export default function Dashboard() {
         userId: user.uid,
         nomeMateria: nomeMateria,
         diasDaSemana: diasSelecionados,
-        totalFaltasPermitidas: 7,
+        totalFaltasPermitidas: Number(totalFaltasPermitidas), // Garante que o valor é um número
         faltasCometidas: 0,
         aulasAssistidas: 0,
         historicoFaltas: []
       });
       setNomeMateria('');
       setDiasSemana({});
+      setTotalFaltasPermitidas(7); // Reseta o valor para o padrão após adicionar
     } catch (error) {
       console.error("Erro ao adicionar matéria: ", error);
       alert("Não foi possível adicionar a matéria.");
@@ -196,6 +200,14 @@ export default function Dashboard() {
                 placeholder="Nome da Matéria (Ex: Cálculo I)"
                 value={nomeMateria}
                 onChange={(e) => setNomeMateria(e.target.value)}
+              />
+              <input
+                className="login-input"
+                type="number"
+                placeholder="Faltas Permitidas"
+                value={totalFaltasPermitidas}
+                onChange={(e) => setTotalFaltasPermitidas(e.target.value)}
+                min="0"
               />
                <div className="dias-checkbox-container" style={{ gridColumn: '1 / -1' }}>
                 <span style={{color: 'var(--text-secondary)', gridColumn: '1 / -1'}}>Dias:</span>
